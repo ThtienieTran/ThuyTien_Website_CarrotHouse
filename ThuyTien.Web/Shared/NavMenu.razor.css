@@ -1,0 +1,69 @@
+/* custom.css */
+.navbar-toggler {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.top-row {
+    height: 3.5rem;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.navbar-custom {
+    background-color: #ffcccb; /* Màu h?ng nh?t */
+    font-size: 1.2rem; /* Kích th??c font l?n h?n */
+}
+
+.navbar-brand-custom {
+    font-size: 1.5rem; /* Kích th??c font l?n h?n cho th??ng hi?u */
+    font-weight: bold;
+}
+
+.oi {
+    width: 2rem;
+    font-size: 1.1rem;
+    vertical-align: text-top;
+    top: -2px;
+}
+
+.nav-item {
+    font-size: 1rem;
+    padding: 0.75rem 1rem; /* Thêm kho?ng cách padding */
+}
+
+.nav-item:first-of-type {
+    padding-top: 1rem;
+}
+
+.nav-item:last-of-type {
+    padding-bottom: 1rem;
+}
+
+.nav-item ::deep a {
+    color: #d7d7d7;
+    border-radius: 4px;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    line-height: 3rem;
+    transition: background-color 0.3s ease; /* Hi?u ?ng chuy?n ??i màu n?n */
+}
+
+.nav-item ::deep a.active {
+    background-color: rgba(255, 255, 255, 0.25);
+    color: white;
+}
+
+.nav-item ::deep a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+@media (min-width: 641px) {
+    .navbar-toggler {
+        display: none;
+    }
+
+    .collapse {
+        display: block; /* Không bao gi? thu g?n sidebar cho màn hình r?ng */
+    }
+}

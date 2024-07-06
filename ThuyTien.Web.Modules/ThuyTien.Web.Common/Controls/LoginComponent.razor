@@ -1,0 +1,86 @@
+﻿@inject NavigationManager navigationManager
+
+<h3>Đăng nhập</h3>
+<br />
+
+@if (loginViewModel != null)
+{
+    <EditForm Model="loginViewModel" OnValidSubmit="HandleValidSubmit" class="form-line">
+        <DataAnnotationsValidator></DataAnnotationsValidator>
+        <ValidationSummary></ValidationSummary>
+
+        <div class="form-group">
+            <label for="name">Tên đăng nhập</label>
+            <InputText id="name" @bind-Value="loginViewModel.UserName" class="form-control"></InputText>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Mật khẩu</label>
+            <InputText id="password" @bind-Value="loginViewModel.Password" type="password" class="form-control"></InputText>
+        </div>
+        <button type="submit" class="btn btn-primary">Đăng nhập</button>
+    </EditForm>
+}
+
+<style>
+    h3 {
+        text-align: center;
+        color: #E91E63; /* Pink color */
+        margin-top: 20px;
+    }
+
+    .form-line {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 30px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+        width: 100%;
+        max-width: 400px;
+    }
+
+        .form-group label {
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #E91E63; /* Pink color */
+        }
+
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        box-sizing: border-box;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+    }
+
+    .btn-primary {
+        background-color: #E91E63; /* Pink color */
+        border-color: #E91E63;
+        width: 100%;
+        max-width: 400px;
+        padding: 10px;
+        border-radius: 4px;
+        font-size: 16px;
+    }
+
+        .btn-primary:hover {
+            background-color: #d81b60; /* Darker pink */
+            border-color: #d81b60;
+        }
+</style>
+
+@code {
+    private LoginViewModel loginViewModel;
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        loginViewModel = new LoginViewModel();
+    }
+    private void HandleValidSubmit()
+    {
+        navigationManager.NavigateTo($"/authenticate?user={loginViewModel.UserName}&pwd={loginViewModel.Password}", true);
+    }
+}

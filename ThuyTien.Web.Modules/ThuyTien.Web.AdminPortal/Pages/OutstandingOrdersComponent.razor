@@ -1,0 +1,39 @@
+﻿@page "/outstandingorders"
+@page "/admin"
+
+@attribute [Authorize]
+
+@inject IViewOutstandingOrdersUseCase viewOutstandingOrdersUseCase
+
+<div class="orders-page">
+    <h3>Danh sách đơn hàng</h3>
+    <br />
+    <OrderListComponent Orders="orders"></OrderListComponent>
+</div>
+
+<style>
+    .orders-page {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h3 {
+        text-align: center;
+        color: #E91E63; /* Pink color */
+        margin-bottom: 20px;
+    }
+</style>
+
+@code {
+    private IEnumerable<Order> orders;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        orders = viewOutstandingOrdersUseCase.Execute();
+    }
+}

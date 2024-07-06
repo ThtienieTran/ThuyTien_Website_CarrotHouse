@@ -1,0 +1,136 @@
+﻿@page "/product/{id:int}"
+
+@inject NavigationManager navigationManager
+@inject IViewProductUseCase viewProduct
+@inject IAddProductToCartUseCase addProductToCartUseCase
+
+<h3>Chi tiết sản phẩm</h3>
+
+<div class="product-container">
+    <div class="product-image">
+        <img src="@product.ImageLink" alt="@product.Name" />
+    </div>
+    <div class="product-details">
+        <h5 class="product-title">@product.Name</h5>
+        <h6 class="product-subtitle">@product.Brand</h6>
+        <p class="product-price">Price: <span>@product.Price.ToString("c", new System.Globalization.CultureInfo("vi-VN"))</span></p>
+        <p class="product-description">@product.Description</p>
+        <div class="product-buttons">
+            <button class="btn btn-primary" @onclick="AddToCart">Thêm vào giỏ hàng</button>
+            <NavLink class="btn btn-secondary" href="products">Sản phẩm</NavLink>
+        </div>
+    </div>
+</div>
+
+<style>
+    h3 {
+        text-align: center;
+        color: #E91E63; /* Pink color */
+        margin-top: 20px;
+    }
+
+    .product-container {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        border-radius: 8px;
+        overflow: hidden;
+        background-color: #fff;
+    }
+
+    .product-image {
+        flex: 1;
+        padding: 20px;
+    }
+
+        .product-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+    .product-details {
+        flex: 2;
+        padding: 20px;
+    }
+
+    .product-title {
+        font-size: 2rem;
+        color: #333;
+    }
+
+    .product-subtitle {
+        font-size: 1.2rem;
+        color: #666;
+    }
+
+    .product-price {
+        font-size: 1.5rem;
+        color: darkred;
+        font-weight: bold;
+        margin: 10px 0;
+    }
+
+    .product-description {
+        font-size: 1rem;
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    .product-buttons {
+        display: flex;
+        gap: 10px;
+    }
+
+    .btn-primary {
+        background-color: #E91E63; /* Pink color */
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+        .btn-primary:hover {
+            background-color: #d81b60; /* Darker pink */
+        }
+
+    .btn-secondary {
+        background-color: #ccc; /* Grey color */
+        border: none;
+        color: black;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+        .btn-secondary:hover {
+            background-color: #bbb; /* Darker grey */
+        }
+</style>
+
+@code {
+    private Product product;
+    [Parameter]
+    public int Id { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        if (Id > 0)
+            product = viewProduct.Execute(Id);
+    }
+    private void AddToCart()
+    {
+        addProductToCartUseCase.Execute(product.ProductId);
+        navigationManager.NavigateTo("/");
+    }
+}

@@ -1,0 +1,51 @@
+﻿@if (this.Product != null)
+{
+    <tr class="product-row">
+        <td>
+            <NavLink href="@($"product/{Product.ProductId}")" class="product-link">
+                @Product.Name
+            </NavLink>
+        </td>
+        <td>@Product.Brand</td>
+        <td class="product-price">@Product.Price.ToString("c", new System.Globalization.CultureInfo("vi-VN"))</td>
+
+     
+    </tr>
+}
+
+<style>
+    .product-row {
+        background-color: #f9f9f9;
+        border-bottom: 1px solid #ddd;
+        transition: background-color 0.3s ease;
+    }
+
+        .product-row:hover {
+            background-color: #f1f1f1;
+        }
+
+    .product-link {
+        text-decoration: none;
+        color: #E91E63; /* Pink color */
+        font-weight: bold;
+    }
+
+        .product-link:hover {
+            color: #d81b60; /* Darker pink */
+        }
+
+    .product-price {
+        color: darkred;
+        font-weight: bold;
+    }
+
+    td {
+        padding: 20px 20px;
+        text-align: left;
+    }
+</style>
+
+@code {
+    [Parameter]
+    public Product Product { get; set; }
+}

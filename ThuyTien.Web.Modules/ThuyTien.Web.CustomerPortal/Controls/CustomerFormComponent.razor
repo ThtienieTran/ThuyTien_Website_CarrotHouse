@@ -1,0 +1,113 @@
+﻿@using Microsoft.AspNetCore.Components.Forms
+
+@if (customer != null)
+{
+    <div class="form-container">
+        <h3>Đặt hàng</h3>
+        <EditForm Model="customer" class="form-line" OnValidSubmit="HandleValidSubmit">
+            <DataAnnotationsValidator></DataAnnotationsValidator>
+            <ValidationSummary></ValidationSummary>
+
+            <div class="form-group">
+                <label for="name">Tên</label>
+                <InputText id="name" @bind-Value="customer.CustomerName" class="form-control"></InputText>
+            </div>
+
+            <div class="form-group">
+                <label for="address">Địa chỉ</label>
+                <InputText id="address" @bind-Value="customer.CustomerAddress" class="form-control"></InputText>
+            </div>
+
+            <div class="form-group">
+                <label for="city">Thành phố</label>
+                <InputText id="city" @bind-Value="customer.CustomerCity" class="form-control"></InputText>
+            </div>
+
+            <div class="form-group">
+                <label for="province">Tỉnh</label>
+                <InputText id="province" @bind-Value="customer.CustomerStateProvince" class="form-control"></InputText>
+            </div>
+
+            <div class="form-group">
+                <label for="country">Quốc tịch</label>
+                <InputText id="country" @bind-Value="customer.CustomerCountry" class="form-control"></InputText>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Đặt hàng</button>
+        </EditForm>
+    </div>
+}
+
+<style>
+    .form-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 30px;
+    }
+
+    h3 {
+        text-align: center;
+        color: #E91E63; /* Pink color */
+        margin-bottom: 20px;
+    }
+
+    .form-line {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+        width: 100%;
+        max-width: 500px;
+    }
+
+        .form-group label {
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+
+    .btn-primary {
+        background-color: #E91E63; /* Pink color */
+        border-color: #E91E63;
+        color: white;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+        .btn-primary:hover {
+            background-color: #d81b60; /* Darker pink */
+        }
+</style>
+
+@code {
+    private CustomerViewModels customer;
+
+    [Parameter]
+    public EventCallback<CustomerViewModels> OnCustomerInfoSubmitted { get; set; }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        customer = new CustomerViewModels();
+    }
+
+    private void HandleValidSubmit()
+    {
+        OnCustomerInfoSubmitted.InvokeAsync(customer);
+    }
+}

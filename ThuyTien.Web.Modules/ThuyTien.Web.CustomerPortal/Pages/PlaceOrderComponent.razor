@@ -1,0 +1,83 @@
+﻿@page "/placeorder"
+
+@inject NavigationManager navigationManager
+@inject IViewShoppingCartUseCase viewShoppingCartUseCase
+@inject IPlaceOrderUseCase PlaceOrderUseCase
+
+<h3 class="page-title">Đặt hàng</h3>
+<br />
+
+@if (order != null)
+{
+    <div class="row place-order-container">
+        <div class="col customer-form-col">
+            <CustomerFormComponent OnCustomerInfoSubmitted="HandleCustomerInfoSubmitted"></CustomerFormComponent>
+        </div>
+        <div class="col order-summary-col">
+            <OrderSummaryComponent order="order" HidePlaceOrder="true"></OrderSummaryComponent>
+        </div>
+    </div>
+}
+
+<style>
+    .page-title {
+        text-align: center;
+        color: #E91E63; /* Pink color */
+        margin-top: 20px;
+    }
+
+    .place-order-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        padding: 20px;
+        gap: 20px;
+    }
+
+    .customer-form-col, .order-summary-col {
+        flex: 1;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .customer-form-col {
+        max-width: 500px;
+    }
+
+    .order-summary-col {
+        max-width: 400px;
+    }
+</style>
+
+@code {
+    private Order order;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            order = await viewShoppingCartUseCase.Execute();
+            StateHasChanged();
+        }
+    }
+
+    private async void HandleCustomerInfoSubmitted(CustomerViewModels customer)
+    {
+        var mapper = new AutoMapper.MapperConfiguration(cfg => cfg.CreateMap<CustomerViewModels, Order>()).CreateMapper();
+        mapper.Map<CustomerViewModels, Order>(customer, order);
+
+        var orderUniqueId = await PlaceOrderUseCase.Execute(order);
+
+        if (string.IsNullOrEmpty(orderUniqueId))
+        {
+            //TODO
+        }
+        else
+        {
+            navigationManager.NavigateTo($"/orderconfirm/{orderUniqueId}");
+        }
+    }
+}

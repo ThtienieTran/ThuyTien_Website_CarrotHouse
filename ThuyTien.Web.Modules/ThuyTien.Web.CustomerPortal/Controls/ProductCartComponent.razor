@@ -1,0 +1,60 @@
+﻿<div class="card product-card m-2 p-2">
+    <img src="@product.ImageLink" class="card-img-top" alt="@product.Name" />
+    <div class="card-body">
+        <h5 class="card-title"><NavLink Href=@($"product/{product.ProductId}")>@product.Name</NavLink></h5>
+        <p class="card-text product-price">@product.Price.ToString("c", new System.Globalization.CultureInfo("vi-VN"))</p>
+
+    </div>
+</div>
+
+<style>
+    .product-card {
+        width: 100%;
+        max-width: 300px;
+        margin: 10px;
+        padding: 15px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        transition: transform 0.2s;
+    }
+
+        .product-card:hover {
+            transform: scale(1.05);
+        }
+
+    .card-img-top {
+        width: 100%;
+        height: auto;
+        border-radius: 8px;
+    }
+
+    .card-title {
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+        .card-title a {
+            text-decoration: none;
+            color: #E91E63; /* Pink color */
+        }
+
+            .card-title a:hover {
+                color: #d81b60; /* Darker pink */
+            }
+
+    .product-price {
+        font-size: 1.1rem;
+        color: darkred;
+        font-weight: bold;
+        text-align: center;
+    }
+</style>
+
+@code {
+    [Parameter]
+    public Product product { get; set; }
+}

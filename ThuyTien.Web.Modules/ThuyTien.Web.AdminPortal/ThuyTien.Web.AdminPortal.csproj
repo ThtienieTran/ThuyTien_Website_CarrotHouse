@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <SupportedPlatform Include="browser" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="6.0.30" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.30" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\ThuyTien.CoreBussiness\ThuyTien.CoreBussiness.csproj" />
+    <ProjectReference Include="..\..\ThuyTien.UseCases\ThuyTien.UseCases.csproj" />
+    <ProjectReference Include="..\ThuyTien.Web.Common\ThuyTien.Web.Common.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,62 @@
+﻿@implements IDisposable
+
+@inject IShoppingCartStateStore shoppingCartStateStore
+
+<div class="shopping-cart">
+    <span class="cart-icon">🛒</span>
+   &nbsp;<span class="item-count">@lineItemCount</span>
+</div>
+
+<style>
+    .shopping-cart {
+        display: flex;
+        align-items: center;
+        font-size: 1.2rem;
+        color: #333;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background-color: #ffc0cb;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s ease;
+    }
+
+        .shopping-cart:hover {
+            background-color: #f1f1f1;
+        }
+
+    .cart-icon {
+        margin-right: 10px;
+        font-size: 1.5rem;
+    }
+
+    .item-count {
+        font-weight: bold;
+        color: #E91E63; /* Pink color */
+    }
+</style>
+
+@code {
+    private int lineItemCount = 0;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            shoppingCartStateStore.AddStateChangeListeners(HandleShoppingCartStateChange);
+            lineItemCount = await shoppingCartStateStore.GetItemsCount();
+            StateHasChanged();
+        }
+    }
+
+    private async void HandleShoppingCartStateChange()
+    {
+        lineItemCount = await shoppingCartStateStore.GetItemsCount();
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        shoppingCartStateStore.RemoveStateChangeListeners(HandleShoppingCartStateChange);
+    }
+}

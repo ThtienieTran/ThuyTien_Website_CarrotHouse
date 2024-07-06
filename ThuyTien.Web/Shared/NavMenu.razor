@@ -1,0 +1,89 @@
+﻿<div class="navbar navbar-expand-lg navbar-dark navbar-custom">
+    <a class="navbar-brand navbar-brand-custom" href="/">CarrotHouse</a>
+    <button class="navbar-toggler navbar-toggler-custom" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav mr-auto">
+            <AuthorizeView>
+                <Authorized>
+                    <li class="nav-item">
+                        <NavLink class="nav-link" href="/outstandingorders">Đơn hàng đang xử lý</NavLink>
+                    </li>
+                    <li class="nav-item">
+                        <NavLink class="nav-link" href="/processedorders">Đơn hàng đã xử lý</NavLink>
+                    </li>
+                </Authorized>
+            </AuthorizeView>
+        </ul>
+        <ul class="navbar-nav ml-auto">
+            <AuthorizeView>
+                <Authorized>
+                    <li class="nav-item">
+                        <NavLink class="nav-link" href="/logout">Đăng xuất</NavLink>
+                    </li>
+                </Authorized>
+                <NotAuthorized>
+                    <li class="nav-item">
+                        <NavLink class="nav-link" href="/cart">
+                            <ThuyTien.Web.CustomerPortal.Controls.CartComponent></ThuyTien.Web.CustomerPortal.Controls.CartComponent>
+                        </NavLink>
+                    </li>
+                </NotAuthorized>
+            </AuthorizeView>
+        </ul>
+    </div>
+</div>
+
+<style>
+    .navbar-custom {
+        background-color: #FFC0CB; /* Light pink color */
+        padding: 10px 20px;
+    }
+
+    .navbar-brand-custom {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #4B0082; /* Indigo color */
+    }
+
+        .navbar-brand-custom:hover {
+            color: #8A2BE2; /* BlueViolet color on hover */
+        }
+
+    .nav-link {
+        color: #4B0082; /* Indigo color for links */
+    }
+
+        .nav-link:hover {
+            color: #8A2BE2; /* BlueViolet color on hover */
+        }
+
+    .navbar-toggler-custom {
+        border-color: #4B0082; /* Indigo color for the toggler button border */
+    }
+
+    .navbar-toggler-icon {
+        background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba%2845, 45, 45, 0.7%29' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+        /* Custom icon color */
+    }
+
+    .navbar-nav .nav-item {
+        margin-left: 15px;
+        margin-right: 15px;
+    }
+
+        .navbar-nav .nav-item .nav-link {
+            font-size: 1rem;
+            padding: 10px 15px;
+        }
+
+            .navbar-nav .nav-item .nav-link:hover {
+                background-color: #FFD700; /* Gold color on hover */
+                border-radius: 5px;
+            }
+</style>
+
+@code {
+    // Any necessary C# code
+}

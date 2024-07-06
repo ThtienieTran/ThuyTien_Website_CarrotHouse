@@ -1,0 +1,59 @@
+﻿<div class="search-bar">
+    Tìm kiếm:
+    <input type="text" @bind-value="filter" class="search-input" />
+    <button @onclick="HandelSearch" class="search-button">Tìm kiếm</button>
+</div>
+<br />
+<br />
+
+<style>
+    .search-bar {
+        display: flex;
+        justify-content: flex-start; /* Align items to the left */
+        align-items: center;
+        margin-top: 20px;
+        padding-left: 20px; /* Optional: Add some padding to the left for better spacing */
+    }
+
+        .search-bar label {
+            margin-right: 10px;
+            font-weight: bold;
+            color: #E91E63; /* Pink color */
+        }
+
+    .search-input {
+        width: 300px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        margin-right: 10px;
+        box-sizing: border-box;
+    }
+
+    .search-button {
+        background-color: #FFC0CB; /* Pink color */
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+        .search-button:hover {
+            background-color: #d81b60; /* Darker pink */
+        }
+</style>
+
+@code {
+    private string filter;
+    [Parameter]
+    public EventCallback<string> OnSearch { get; set; }
+    private void HandelSearch()
+    {
+        OnSearch.InvokeAsync(filter);
+    }
+}

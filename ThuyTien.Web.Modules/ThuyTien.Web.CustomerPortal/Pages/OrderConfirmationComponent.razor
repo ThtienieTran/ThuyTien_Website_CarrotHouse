@@ -1,0 +1,95 @@
+﻿@page "/orderconfirm/{uniqueId}"
+
+@inject IViewOrderConfirmationUseCase viewOrderConfirmationUseCase
+
+<h3 class="order-confirmation-title">Xác nhận đơn hàng</h3>
+<br />
+@if (order != null)
+{
+    <div class="shipping-info">
+        <p><b>Thông tin vận chuyển:</b></p>
+        <p>@order.CustomerName</p>
+        <p>@order.CustomerAddress</p>
+        <p>@order.CustomerCity</p>
+        <p>@order.CustomerStateProvince</p>
+        <p>@order.CustomerCountry</p>
+    </div>
+    <br />
+    <OrderSummaryComponent order="order" HidePlaceOrder="true"></OrderSummaryComponent>
+    <br />
+    <table class="table order-table">
+        <thead>
+            <tr>
+                <th>Tên sản phẩm</th>
+                <th>Số lượng</th>
+                <th>Giá</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in order.LineItems)
+            {
+                <tr>
+                    <td>@item.Product.Name</td>
+                    <td>@item.Quantity</td>
+                    <td>@item.Product.Price.ToString("c", new System.Globalization.CultureInfo("vi-VN"))</td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<style>
+    .order-confirmation-title {
+        text-align: center;
+        color: #E91E63; /* Pink color */
+        margin-top: 20px;
+    }
+
+    .shipping-info {
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 20px;
+        background-color: #f9f9f9;
+        margin-bottom: 20px;
+    }
+
+    .order-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+
+        .order-table th, .order-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .order-table th {
+            background-color: #f2f2f2;
+            color: #333;
+        }
+
+        .order-table tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .order-table td {
+            vertical-align: middle;
+        }
+</style>
+
+@code {
+    private Order order;
+    [Parameter]
+    public string UniqueId { get; set; }
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        if (!string.IsNullOrWhiteSpace(UniqueId))
+        {
+            order = viewOrderConfirmationUseCase.Execute(UniqueId);
+        }
+    }
+}

@@ -1,0 +1,101 @@
+﻿@inherits LayoutComponentBase
+
+<PageTitle>CarrotHouse</PageTitle>
+
+<main class="main-container">
+    <TopNavBar></TopNavBar>
+
+    <div class="container-fluid">
+        <article class="content">
+            @Body
+        </article>
+    </div>
+</main>
+
+<style>
+    body {
+        font-family: 'Roboto', sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+    }
+
+    .main-container {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+
+    .top-navbar {
+        background-color: #ff6f61; /* Dark background for navbar */
+        padding: 10px 20px;
+        border-bottom: 1px solid #444;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        transition: background-color 0.3s, box-shadow 0.3s;
+    }
+
+        .top-navbar:hover {
+            background-color: #3c4147; /* Slightly lighter on hover */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+    .navbar-brand {
+        font-weight: bold;
+        font-size: 1.5rem;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        transition: color 0.3s;
+    }
+
+        .navbar-brand:hover {
+            color: #ff6f61; /* Light coral color */
+        }
+
+    .navbar-logo {
+        height: 40px; /* Adjust the height as needed */
+        margin-right: 10px;
+        border-radius: 50%; /* Circular logo */
+        transition: transform 0.3s;
+    }
+
+        .navbar-logo:hover {
+            transform: scale(1.1); /* Slightly enlarge on hover */
+        }
+
+    .navbar-nav .nav-link {
+        color: #fff;
+        font-weight: bold;
+        transition: color 0.3s;
+    }
+
+        .navbar-nav .nav-link:hover {
+            color: #ff6f61; /* Light coral color */
+        }
+
+    .navbar-toggler {
+        border-color: #ddd;
+    }
+
+    .navbar-toggler-icon {
+        background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba%28255, 255, 255, 0.7%29' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+    }
+
+    .container-fluid {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 40px 20px;
+    }
+
+    .content {
+        width: 100%;
+        max-width: 1400px; /* Increase the maximum width */
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        margin: 20px;
+    }
+</style>

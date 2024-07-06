@@ -1,0 +1,142 @@
+﻿@inject IDeleteProductUseCase deleteProductUseCase
+@inject IUpdateQuantityUseCase updateQuantityUseCase
+
+@if (LineItem != null && LineItem.Product != null)
+{
+    <ul class="product-list">
+        <li class="product-item">
+            <div class="product-img">
+                <img src="@LineItem.Product.ImageLink" class="product-image" />
+            </div>
+            <div class="product-details">
+                <h5 class="product-name">@LineItem.Product.Name</h5>
+                <div class="quantity">
+                    Số lượng:&nbsp;&nbsp;
+                    <input type="number" min="0" value="@LineItem.Quantity" @onchange="HandleQuantityChange" class="quantity-input" />
+                </div>
+                <div class="price">
+                    Giá:&nbsp;&nbsp;@LineItem.Product.Price.ToString("c", new System.Globalization.CultureInfo("vi-VN"))
+                </div>
+                <button class="btn btn-danger" @onclick="@(() => DeleteProduct(LineItem.ProductId))">Xóa</button>
+            </div>
+        </li>
+    </ul>
+}
+
+<style>
+    .product-list {
+        display: flex;
+        flex-wrap: wrap; /* Cho phép các sản phẩm xuống dòng nếu không đủ chỗ */
+        padding: 0;
+        list-style-type: none;
+        gap: 20px; /* Khoảng cách giữa các sản phẩm */
+    }
+
+    .product-item {
+        display: flex; /* Hiển thị theo chiều ngang */
+        align-items: center;
+        background-color: #fff;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        transition: transform 0.2s, box-shadow 0.2s;
+        width: 100%; /* Đảm bảo sản phẩm chiếm hết chiều rộng */
+    }
+
+        .product-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+    .product-img {
+        flex: 0 0 auto;
+        text-align: center;
+        margin-right: 20px; /* Khoảng cách giữa hình ảnh và chi tiết sản phẩm */
+    }
+
+    .product-image {
+        max-width: 100px; /* Giới hạn chiều rộng của hình ảnh */
+        height: auto;
+        border-radius: 10px;
+    }
+
+    .product-details {
+        flex: 1;
+        text-align: left; /* Căn chỉnh văn bản bên trái */
+    }
+
+    .product-name {
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin-bottom: 10px;
+        color: #333;
+    }
+
+    .quantity {
+        margin: 10px 0;
+    }
+
+    .quantity-input {
+        width: 60px;
+        padding: 5px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        text-align: center;
+        transition: border-color 0.2s;
+    }
+
+        .quantity-input:focus {
+            border-color: #007bff;
+        }
+
+    .price {
+        font-size: 1rem;
+        color: #555;
+        margin: 10px 0;
+    }
+
+    .btn-danger {
+        background-color: #e3342f;
+        border-color: #e3342f;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.2s, transform 0.2s;
+    }
+
+        .btn-danger:hover {
+            background-color: #cc1f1a;
+            border-color: #cc1f1a;
+            transform: scale(1.05);
+        }
+</style>
+
+@code {
+    [Parameter]
+    public OrderLineItem LineItem { get; set; }
+
+    [Parameter]
+    public EventCallback<Order> OnDeleteProduct { get; set; }
+    [Parameter]
+    public EventCallback<Order> OnUpdateQuantity { get; set; }
+
+    async void HandleQuantityChange(ChangeEventArgs e)
+    {
+        if (e.Value == null || string.IsNullOrEmpty(e.Value.ToString())) return;
+        int qty = 0;
+        if (int.TryParse(e.Value.ToString(), out qty))
+        {
+            if (qty < 0) return;
+            var order = await updateQuantityUseCase.Execute(LineItem.ProductId, qty);
+            await OnUpdateQuantity.InvokeAsync(order);
+        }
+    }
+
+    async void DeleteProduct(int productId)
+    {
+        var order = await deleteProductUseCase.Execute(productId);
+        await OnDeleteProduct.InvokeAsync(order);
+    }
+}

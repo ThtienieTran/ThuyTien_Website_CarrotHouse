@@ -1,0 +1,117 @@
+﻿@inject NavigationManager navigationManager
+
+<div class="card m-2 order-summary-card">
+    <div class="card-body">
+        <h5 class="card-title">Tổng đơn hàng</h5>
+        <div class="card-text d-flex justify-content-between order-summary-item">
+            <div>
+                Mặt hàng (@itemsCount):
+            </div>
+            <div>
+                <span>@itemsTotalPrice.ToString("c", new System.Globalization.CultureInfo("vi-VN"))</span>
+
+            </div>
+        </div>
+        <div class="card-text d-flex justify-content-between order-summary-item">
+            <div>
+                Vận chuyển và xử lý:
+            </div>
+            <div>
+                <text>0.000</text>
+            </div>
+        </div>
+        <div class="card-text d-flex justify-content-between order-summary-item">
+            <div>
+                Thuế:
+            </div>
+            <div>
+                <text>0.000</text>
+            </div>
+        </div>
+        <div class="card-text d-flex justify-content-between order-summary-total">
+            <div>
+                <b>Tổng đơn hàng: </b>
+            </div>
+            <div>
+                <b>@itemsTotalPrice.ToString("c", new System.Globalization.CultureInfo("vi-VN"))</b>
+
+            </div>
+        </div>
+    </div>
+    <div class="card-footer text-center">
+        @if (!HidePlaceOrder)
+        {
+            <button class="btn btn-primary place-order-button" @onclick="PlaceOrder">Đặt hàng</button>
+        }
+    </div>
+</div>
+
+<style>
+    .order-summary-card {
+        width: 100%;
+        max-width: 400px;
+        margin: auto;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .card-title {
+        text-align: center;
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+        color: #E91E63; /* Pink color */
+    }
+
+    .order-summary-item {
+        margin-bottom: 10px;
+        font-size: 1rem;
+    }
+
+    .order-summary-total {
+        color: darkred;
+        font-size: 1.2rem;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+    .place-order-button {
+        width: 100%;
+        padding: 10px;
+        font-size: 1.1rem;
+        background-color: #E91E63; /* Pink color */
+        border-color: #E91E63;
+    }
+
+        .place-order-button:hover {
+            background-color: #d81b60; /* Darker pink */
+            border-color: #d81b60;
+        }
+</style>
+
+@code {
+    int itemsCount = 0;
+    double itemsTotalPrice = 0;
+
+    [Parameter]
+    public Order order { get; set; }
+
+    [Parameter]
+    public bool HidePlaceOrder { get; set; } = false;
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        if (order != null)
+        {
+            itemsCount = order.LineItems.Count;
+            itemsTotalPrice = 0;
+            order.LineItems.ForEach(x => itemsTotalPrice += x.Price * x.Quantity);
+        }
+    }
+
+    private void PlaceOrder()
+    {
+        navigationManager.NavigateTo("/placeOrder");
+    }
+}

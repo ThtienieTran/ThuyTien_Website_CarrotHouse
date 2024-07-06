@@ -1,0 +1,76 @@
+﻿@page "/orderdetail/{id:int}"
+
+@attribute [Authorize]
+@inject NavigationManager navigationManager
+@inject IProcessOrderUseCase processOrderUseCase
+@inject IViewOrderDetailUseCase viewOrderDetailUseCase
+
+<h3>Chi tiết đơn hàng</h3>
+@if (order != null)
+{
+    <p>
+        <b>Thông tin khách hàng:</b>
+    </p>
+    <p>@order.CustomerName</p>
+    <p>@order.CustomerAddress</p>
+    <p>@order.CustomerCity</p>
+    <p>@order.CustomerStateProvince</p>
+    <p>@order.CustomerName</p>
+    <br />
+    <br />
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Tên sản phẩm</th>
+                <th>Giá</th>
+                <th>Số lượng</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in order.LineItems)
+            {
+                <tr>
+                    <td>@item.Product.Name</td>
+                    <td>@item.Product.Price</td>
+                    <td>@item.Quantity</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <br />
+    <button type="button" class="btn btn-primary" @onclick="HandleProcessOrder">Đánh dấu đơn hàng đã xử lý</button>
+
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+    private Order order;
+
+    private AuthenticationState authState;
+
+    [CascadingParameter]
+    private Task<AuthenticationState> authStateTask { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        authState = await authStateTask;
+    }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        if (Id > 0)
+        {
+            order = viewOrderDetailUseCase.Execute(Id);
+        }
+    }
+    private void HandleProcessOrder()
+    {
+        if (order != null && authState != null)
+        {
+            processOrderUseCase.Execute(order.OrderId.Value, authState.User.Identity.Name);
+            navigationManager.NavigateTo("/outstandingorders");
+        }
+    }
+}

@@ -1,0 +1,100 @@
+﻿@page "/cart"
+@using ThuyTien.UseCases.ShoppingCartScreen.Interfaces
+
+@inject IViewShoppingCartUseCase viewShoppingCartUseCase
+
+<h3 class="page-title">Giỏ hàng</h3>
+<br />
+@if (order != null && order.LineItems != null && order.LineItems.Count > 0)
+{
+    <div class="row cart-container">
+        <div class="col-6 line-items-container">
+            <ul class="line-items-list">
+                @for (int i = 0; i < order.LineItems.Count; i++)
+                {
+                    <li class="line-item">
+                        <LineItemComponent LineItem="order.LineItems[i]"
+                                           OnDeleteProduct="HandleDeleteProduct"
+                                           OnUpdateQuantity="HandleUpdateQuantity"></LineItemComponent>
+                    </li>
+                    @if (i < order.LineItems.Count - 1)
+                    {
+                        <li class="divider">
+                            <hr />
+                        </li>
+                    }
+                }
+            </ul>
+        </div>
+        <div class="col order-summary-container">
+            <OrderSummaryComponent order="order"></OrderSummaryComponent>
+        </div>
+    </div>
+}
+
+<style>
+    .page-title {
+        text-align: center;
+        color: #E91E63; /* Pink color */
+        margin-top: 20px;
+    }
+
+    .cart-container {
+        display: flex;
+        justify-content: space-between;
+        padding: 20px;
+        gap: 20px;
+    }
+
+    .line-items-container {
+        flex: 2;
+        background-color: #f9f9f9;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .line-items-list {
+        padding: 0;
+        list-style: none;
+    }
+
+    .line-item {
+        margin-bottom: 20px;
+    }
+
+    .divider {
+        list-style: none;
+    }
+
+    .order-summary-container {
+        flex: 1;
+        background-color: #f9f9f9;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+</style>
+
+@code {
+    private Order order;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            order = await viewShoppingCartUseCase.Execute();
+            StateHasChanged();
+        }
+    }
+
+    private void HandleDeleteProduct(Order order)
+    {
+        this.order = order;
+    }
+
+    private void HandleUpdateQuantity(Order order)
+    {
+        this.order = order;
+    }
+}

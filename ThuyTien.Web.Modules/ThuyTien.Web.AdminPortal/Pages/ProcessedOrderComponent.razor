@@ -1,0 +1,37 @@
+﻿@page "/processedorders"
+
+@attribute [Authorize]
+@inject IViewProcessedOrdersUseCase viewProcessedOrdersUseCase
+
+<div class="processed-orders-page">
+    <h3>Đơn hàng đã xử lý</h3>
+    <br />
+    <OrderListComponent Orders="orders"></OrderListComponent>
+</div>
+
+<style>
+    .processed-orders-page {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h3 {
+        text-align: center;
+        color: #E91E63; /* Pink color */
+        margin-bottom: 20px;
+    }
+</style>
+
+@code {
+    private IEnumerable<Order> orders;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        orders = viewProcessedOrdersUseCase.Execute();
+    }
+}
